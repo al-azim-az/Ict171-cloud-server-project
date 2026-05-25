@@ -1,10 +1,12 @@
 # ICT171 Cloud Server Project
 
 **Student Name:** MD ABDULLAH AL AZIM
-**Student Number:** 36018444
-**Unit:** ICT171 — Introduction to Server Environments and Architectures
-**Semester:** 2026 S1
 
+**Student Number:** 36018444
+
+**Unit:** ICT171 — Introduction to Server Environments and Architectures
+
+**Semester:** 2026 S1
 ## Live Server
 - **Domain:** https://alazimazxyz.xyz (will update once configured)
 - **Public IP:** TBD (will update after VM provisioning)

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MD Abdullah Al Azim — ICT student at Murdoch University, focused on cybersecurity, cloud infrastructure, and Linux systems.">
+    <title>MD Abdullah Al Azim — Cloud & Cybersecurity</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-card: #161b33;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Header / Hero */
+        header {
+            text-align: center;
+            padding: 60px 20px 80px;
+            position: relative;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(90deg, #818cf8, #c084fc, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .badge {
+            padding: 6px 16px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            border-radius: 100px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        /* About section */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+        }
+
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            font-size: 1.02em;
+            margin-bottom: 16px;
+        }
+
+        .about-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        /* Project grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+
+        .project-card h3 {
+            font-size: 1.15em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            margin-bottom: 16px;
+        }
+
+        .project-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+
+        .project-link:hover {
+            gap: 10px;
+        }
+
+        /* Tech stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .tech-item strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1.05em;
+            margin-bottom: 4px;
+        }
+
+        /* Info panel */
+        .info-panel {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.92em;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.92em;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px 20px;
+            color: var(--text-secondary);
+            font-size: 0.88em;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .footer-divider {
+            margin: 0 8px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .container { padding: 30px 16px; }
+            header { padding: 30px 10px 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <div class="avatar">AA</div>
+            <h1>MD Abdullah Al Azim</h1>
+            <p class="subtitle">IT Undergraduate · Cloud Infrastructure &amp; Cybersecurity</p>
+            <div class="badges">
+                <span class="badge">Murdoch University</span>
+                <span class="badge">Perth, Australia</span>
+                <span class="badge">ICT171 — 2026 S1</span>
+            </div>
+        </header>
+
+        <section>
+            <h2>About This Server</h2>
+            <div class="about-card">
+                <p>
+                    This site runs on a <span class="highlight">multi-purpose Ubuntu 24.04 server</span> I provisioned and configured manually on Microsoft Azure as part of ICT171 Assignment 3. Every layer — from the OS to the firewall, Nginx, SSL, DNS, and custom monitoring — was set up by hand via SSH, not from any pre-built image.
+                </p>
+                <p>
+                    The goal was to gain genuine, hands-on infrastructure experience: how cloud providers expose compute resources, how DNS maps a name to an IP, how a reverse proxy routes subdomains, how a host firewall layers on top of a cloud-level NSG, and how Bash scripting can automate real-world security tasks. The full process is documented step-by-step on GitHub so anyone — including a future version of me — could rebuild it from scratch in an hour.
+                </p>
+                <p>
+                    Beyond this assignment, I plan to keep extending this server throughout my degree as my personal lab environment and a living portfolio of what I'm learning in cybersecurity, networking, and cloud architecture.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Live Components</h2>
+            <div class="project-grid">
+
+                <div class="project-card">
+                    <div class="project-icon">🛡️</div>
+                    <h3>Security Audit Dashboard</h3>
+                    <p>
+                        A live dashboard generated by a custom Bash script. Monitors failed SSH logins, firewall rules, SSL expiry, listening ports, system updates, and resource usage. Refreshes hourly via cron.
+                    </p>
+                    <a href="https://status.alazimazxyz.xyz" class="project-link">
+                        View Dashboard →
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">📚</div>
+                    <h3>GitHub Repository</h3>
+                    <p>
+                        Full project documentation in Markdown, including step-by-step lab notes (English and Bangla), commit history, and the source of every config file and script on this server.
+                    </p>
+                    <a href="https://github.com/al-azim-az/ict171-cloud-server-project" class="project-link">
+                        View Source →
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">🔒</div>
+                    <h3>HTTPS Everywhere</h3>
+                    <p>
+                        TLS certificate issued by Let's Encrypt, covering the root domain plus the www and status subdomains. Configured manually using Certbot with automatic renewal enabled.
+                    </p>
+                    <a href="#tech" class="project-link">
+                        Stack Details →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tech">
+            <h2>Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-item"><strong>Microsoft Azure</strong>IaaS · Australia East</div>
+                <div class="tech-item"><strong>Ubuntu 24.04 LTS</strong>Server OS</div>
+                <div class="tech-item"><strong>Nginx</strong>Reverse proxy + HTTPS</div>
+                <div class="tech-item"><strong>UFW</strong>Host firewall</div>
+                <div class="tech-item"><strong>Let's Encrypt</strong>TLS certificates</div>
+                <div class="tech-item"><strong>Bash</strong>Automation scripting</div>
+                <div class="tech-item"><strong>Cron</strong>Scheduled tasks</div>
+                <div class="tech-item"><strong>Namecheap DNS</strong>Domain routing</div>
+                <div class="tech-item"><strong>GitHub</strong>Version control</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Server Details</h2>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">Domain</span>
+                    <span class="info-value">alazimazxyz.xyz</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Public IP</span>
+                    <span class="info-value">20.5.169.97</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Region</span>
+                    <span class="info-value">Azure Australia East (Sydney)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Operating System</span>
+                    <span class="info-value">Ubuntu 24.04.4 LTS</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Subdomains Served</span>
+                    <span class="info-value">@ · www · status</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>
+                <strong>MD Abdullah Al Azim</strong> · Student ID: 36018444 · Murdoch University<br>
+                Built for ICT171 Assignment 3 — 2026 Semester 1
+            </p>
+            <p style="margin-top: 12px;">
+                <a href="https://github.com/al-azim-az/ict171-cloud-server-project">GitHub</a>
+                <span class="footer-divider">·</span>
+                <a href="https://status.alazimazxyz.xyz">Security Dashboard</a>
+                <span class="footer-divider">·</span>
+                <a href="mailto:ialazimazim@gmail.com">Contact</a>
+            </p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

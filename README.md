@@ -42,7 +42,9 @@ All components were configured manually via SSH on a single Azure VM, using Ngin
 
 - 🌐 **Main Site:** [https://alazimazxyz.xyz](https://alazimazxyz.xyz) — custom landing page
 - 🛡️ **Security Dashboard:** [https://status.alazimazxyz.xyz](https://status.alazimazxyz.xyz) — live security monitoring
--- 🎥 **Video Explainer:** [Watch on OneDrive](https://murdochuniversity-my.sharepoint.com/personal/36018444_student_murdoch_edu_au/_layouts/15/stream.aspx?id=%2Fpersonal%2F36018444%5Fstudent%5Fmurdoch%5Fedu%5Fau%2FDocuments%2F0529%20%281%29%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ee80d4f03%2Dfe0e%2D4ea6%2D8c02%2De70ae31b5760)
+- 🎥 **Video Explainer:** [Watch on OneDrive](https://murdochuniversity-my.sharepoint.com/personal/36018444_student_murdoch_edu_au/_layouts/15/stream.aspx?id=%2Fpersonal%2F36018444%5Fstudent%5Fmurdoch%5Fedu%5Fau%2FDocuments%2F0529%20%281%29%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ee80d4f03%2Dfe0e%2D4ea6%2D8c02%2De70ae31b5760)
+
+---
 ---
 
 ## Documentation Index

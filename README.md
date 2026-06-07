@@ -45,7 +45,6 @@ All components were configured manually via SSH on a single Azure VM, using Ngin
 - 🎥 **Video Explainer:** [Watch on OneDrive](https://murdochuniversity-my.sharepoint.com/personal/36018444_student_murdoch_edu_au/_layouts/15/stream.aspx?id=%2Fpersonal%2F36018444%5Fstudent%5Fmurdoch%5Fedu%5Fau%2FDocuments%2F0529%20%281%29%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ee80d4f03%2Dfe0e%2D4ea6%2D8c02%2De70ae31b5760)
 
 ---
----
 
 ## Documentation Index
 
@@ -71,7 +70,7 @@ Mixed-language deep notes explaining concepts, commands, real-world context, and
 
 ## Architecture Summary
 
-```
+​```
 USER (Browser)
     │ HTTPS request
     ▼
@@ -91,25 +90,160 @@ UBUNTU 24.04 VM (ict171-server)
     │
     └── Cron (hourly)
           └── security-audit.sh → generates dashboard HTML
-```
+​```
 
 This is **defense in depth** — two independent firewalls (Azure NSG + UFW host firewall), so a misconfiguration in one does not expose the server.
 
 ---
 
-## Security Audit Script
+## 🛡️ Custom Security Audit Script — Detailed Breakdown
 
-A custom Bash script that performs seven security health checks and publishes a styled HTML dashboard:
+This section documents the custom Bash script (`security-audit.sh`) developed for this project, including what it does, how it was written, and how to independently verify its output.
 
-1. Failed SSH login attempts (from system journal) — brute-force detection
-2. Active SSH sessions — unauthorized access detection
-3. Listening network ports — attack surface monitoring
-4. UFW firewall status — security baseline verification
-5. SSL/TLS certificate expiry — downtime prevention
-6. Pending system updates — vulnerability management
-7. System resource health — operational monitoring
+### What the Script Does (and Why It's Useful)
 
-The script runs via cron every hour at minute zero. The output is published live at [https://status.alazimazxyz.xyz](https://status.alazimazxyz.xyz) and is independently verifiable.
+This script is **not a modified lab activity** — it is an original creation built specifically to address a real-world server operations problem: **continuous, automated security visibility**.
+
+In a production environment, administrators need to know at a glance whether the server is being attacked, whether the firewall is working, whether the SSL certificate is about to expire, and whether the system needs patching. Running individual commands manually each time is impractical. This script automates that monitoring and presents the results as a styled HTML dashboard accessible from any browser.
+
+The script performs **seven independent security health checks** and writes the results to a public-facing dashboard:
+
+| # | Check | Linux Tool Used | What It Detects |
+|---|---|---|---|
+| 1 | Failed SSH login attempts (last 24h) | `journalctl _COMM=sshd` + `grep` | Brute-force attack attempts |
+| 2 | Active SSH sessions | `who` + `wc -l` | Unauthorized concurrent access |
+| 3 | Listening TCP/UDP ports | `sudo ss -tuln` + `awk` | Unexpected exposed services (attack surface) |
+| 4 | UFW firewall status & rules | `sudo ufw status` | Misconfigured or disabled firewall |
+| 5 | SSL/TLS certificate expiry | `openssl s_client` + `openssl x509` | Certificates near expiry (with day countdown) |
+| 6 | Pending system updates | `apt list --upgradable` | Unpatched security vulnerabilities |
+| 7 | System resource health | `df`, `free`, `uptime`, `uname` | Disk, memory, load, kernel issues |
+
+### Why This Script Is Creative and Useful
+
+| Lab activity baseline | This script's contributions |
+|---|---|
+| Prints text to terminal | Generates styled HTML dashboard with cards |
+| Run manually when needed | Runs automatically every hour via cron |
+| Output disappears when terminal closes | Output is persistent, public, and verifiable online |
+| One or two basic checks | Seven distinct security checks |
+| Local-only utility | Published live at a real public URL |
+| No state interpretation | Calculates derived values (e.g. SSL days remaining) |
+| Static structure | Color-coded status badges (OK/Warn/Danger) based on logic |
+
+The script combines **system administration**, **security monitoring**, **HTML/CSS generation**, and **automation scheduling** into a single, self-contained utility that demonstrates the breadth of the ICT171 learning outcomes in one file.
+
+### Script Documentation — Inline Comments
+
+The script (`security-audit.sh`) is **fully documented inline**, so anyone reading the source can understand its purpose without external context. Documentation appears in three forms:
+
+**1. File header block** — explains the script's purpose, author, project, and the full list of checks performed:
+​```bash
+#!/bin/bash
+#==============================================================================
+# Security Audit Dashboard Generator
+# Project : ICT171 Cloud Server Project
+# Author  : MD Abdullah Al Azim (36018444)
+# Murdoch University — 2026 S1
+#
+# Purpose:
+#   Performs automated security health checks on the server and generates
+#   a polished HTML dashboard published at https://status.alazimazxyz.xyz
+#
+# Checks performed:
+#   1. Failed SSH login attempts (brute-force detection)
+#   2. Active SSH sessions (unauthorized access detection)
+#   ...
+#==============================================================================
+​```
+
+**2. Section comments** — every functional block has a comment explaining its role:
+​```bash
+#-------------------------------------------------------------------------------
+# Data Collection Section
+#-------------------------------------------------------------------------------
+
+# (1) Failed SSH login attempts from system journal (last 24h)
+FAILED_SSH=$(sudo journalctl _COMM=sshd --since "24 hours ago" 2>/dev/null \
+             | grep -ci "failed password" || echo "0")
+​```
+
+**3. Logic-step comments** — non-obvious calculations and decisions are explained:
+​```bash
+# Compute SSL certificate days remaining
+if [ -n "$SSL_RAW" ]; then
+    SSL_EXPIRY_EPOCH=$(date -d "$SSL_RAW" +%s 2>/dev/null)
+    NOW_EPOCH=$(date +%s)
+    SSL_DAYS_LEFT=$(( (SSL_EXPIRY_EPOCH - NOW_EPOCH) / 86400 ))
+fi
+​```
+
+A new reader can therefore follow the entire script top-to-bottom and understand both **what is happening** and **why each step is necessary**.
+
+### Verifiable Output (Live Dashboard)
+
+The script's output is **published online and is independently verifiable by anyone**, including markers, without needing access to the server.
+
+**🔗 Live dashboard:** [https://status.alazimazxyz.xyz](https://status.alazimazxyz.xyz)
+
+The dashboard:
+
+- Displays a **"Last updated" timestamp** at the top that changes every time the script runs
+- Shows all seven security checks as separate visual cards
+- Uses **color-coded status badges** (green OK / yellow Warn) calculated from the data
+- Is **automatically refreshed every hour** by the cron job — no human intervention required
+
+This means the dashboard is not a static screenshot or pre-rendered HTML — it is the **genuine, current output** of a Bash script running on this server. The timestamp at the top of the page is the clearest proof of this; running the script via SSH and refreshing the dashboard will show a matching, updated timestamp.
+
+### Deployment Steps (Reproducibility)
+
+Anyone can recreate this script's deployment by following these steps:
+
+​```bash
+# 1. Create the scripts directory
+mkdir -p ~/scripts
+
+# 2. Download the script from this repository
+curl -o ~/scripts/security-audit.sh \
+  https://raw.githubusercontent.com/al-azim-az/ict171-cloud-server-project/main/security-audit.sh
+
+# 3. Make it executable
+chmod +x ~/scripts/security-audit.sh
+
+# 4. Create the output directory served by Nginx
+sudo mkdir -p /var/www/status
+
+# 5. Run it once to generate the initial dashboard
+sudo bash ~/scripts/security-audit.sh
+
+# 6. Schedule it to run every hour via cron
+(sudo crontab -l 2>/dev/null; echo "0 * * * * /bin/bash /home/azureuser/scripts/security-audit.sh >> /var/log/security-audit.log 2>&1") | sudo crontab -
+​```
+
+After these steps, the dashboard will be live and auto-updating.
+
+### Nginx Configuration for the Status Subdomain
+
+The dashboard is served by a dedicated Nginx server block (`/etc/nginx/sites-available/status`):
+
+​```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name status.alazimazxyz.xyz;
+
+    root /var/www/status;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # Certbot adds the SSL configuration here automatically
+    # when the certificate is expanded to cover this subdomain.
+}
+​```
+
+This server block is what makes the multi-purpose architecture work — Nginx examines the `Host` header of every incoming request and routes `status.alazimazxyz.xyz` requests here, while the main domain is served by a separate block.
 
 ---
 
